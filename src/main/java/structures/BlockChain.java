@@ -7,15 +7,19 @@ import java.util.List;
 
 public class BlockChain {
 
-    private List<Block> blockChain;
+    private final List<Block> blockChain;
 
     public BlockChain(){
         this.blockChain = new ArrayList<>();
     }
 
-    public void addBlock(String data, String prevHash){
-        Block b = new Block(data, prevHash);
-        this.blockChain.add(b);
+    public Block addBlock(String data, String prevHash) throws EmptyBlockChainException {
+        if(this.blockChain.size() == 0 || this.getLastBlock().getHash().equals(prevHash)){
+            Block b = new Block(data, prevHash);
+            this.blockChain.add(b);
+            return b;
+        }
+        return null;
     }
 
     public Block getGenesisBlock() throws EmptyBlockChainException {
