@@ -21,6 +21,8 @@ public class Block {
         this.blockData = data;
         this.previousHash = prevHash;
         this.timestamp = Instant.now().toEpochMilli();
+        this.nonce = 1;
+        this.calculateSHA256Hash();
     }
 
     public String calculateSHA256Hash(){
@@ -37,7 +39,7 @@ public class Block {
             for(byte b : bytes){
                 sb.append(String.format("%02X", b));
             }
-            return sb.toString();
+            this.hash = sb.toString();
         }catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
