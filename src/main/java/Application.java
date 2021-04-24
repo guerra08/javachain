@@ -1,20 +1,20 @@
-import structures.Block;
-
-import java.util.ArrayList;
-import java.util.List;
+import exceptions.EmptyBlockChainException;
+import structures.BlockChain;
 
 public class Application {
 
     public static void main(String[] args) {
-        List<Block> blockChain = new ArrayList<>();
 
-        Block genesis = new Block("This is the first", null);
-        blockChain.add(genesis);
+        try{
+            BlockChain blockChain = new BlockChain();
 
-        Block second = new Block("The second is here", blockChain.get(blockChain.size() - 1).getHash());
-        blockChain.add(second);
+            blockChain.addBlock("This is the genesis block.", null);
+            blockChain.addBlock("This is the second block", blockChain.getLastBlock().getHash());
 
-        System.out.println(blockChain);
+            System.out.println(blockChain.getLastBlock());
+        }catch (EmptyBlockChainException e){
+            System.err.println("BlockChain cannot be empty");
+        }
     }
 
 }
