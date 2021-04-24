@@ -1,11 +1,13 @@
 package structures;
 
 import lombok.*;
+import utils.ResourceLoader;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.time.Instant;
+import java.util.Properties;
 
 @Getter
 @Setter
@@ -21,8 +23,10 @@ public class Block {
         this.blockData = data;
         this.previousHash = prevHash;
         this.timestamp = Instant.now().toEpochMilli();
-        this.nonce = 1;
+        this.nonce = 0;
         this.hash = calculateSHA256Hash();
+
+        this.mineBlock();
     }
 
     public String calculateSHA256Hash(){
@@ -49,6 +53,16 @@ public class Block {
     public boolean checkHashAgainstBlockHash(String hash){
         if(this.hash == null) return false;
         return hash.equals(this.hash);
+    }
+
+    public void mineBlock(){
+        int strength = Integer.parseInt(new ResourceLoader().loadBlockChainProperty("nonce.strength"));
+        String targetSubstr = new String(new char[strength]).replace('\0','0');
+
+        while(!this.hash.substring(0, strength).equals(targetSubstr)){
+            this.nonce++;
+            this.hash = calculateSHA256Hash();
+        }
     }
 
 }

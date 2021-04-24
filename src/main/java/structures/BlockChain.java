@@ -14,7 +14,7 @@ public class BlockChain {
     }
 
     public Block addBlock(String data, String prevHash) throws EmptyBlockChainException {
-        if(this.blockChain.size() == 0 || this.getLastBlock().getHash().equals(prevHash)){
+        if(this.blockChain.size() == 0 || this.getLastBlock().checkHashAgainstBlockHash(prevHash)){
             Block b = new Block(data, prevHash);
             this.blockChain.add(b);
             return b;
