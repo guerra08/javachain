@@ -46,4 +46,23 @@ public class BlockChainTests {
         assertThrows(EmptyBlockChainException.class, blockChain::getGenesisBlock);
     }
 
+    @Test
+    void testFindCreatedBlockOnChain() throws EmptyBlockChainException {
+        Block b = blockChain.addBlock("A block", null);
+
+        assertEquals(b.getHash(), blockChain.findBlockByHash(b.getHash()).getHash());
+    }
+
+    @Test
+    void testFindNotCreatedBlockOnChain() throws EmptyBlockChainException {
+        blockChain.addBlock("A block", null);
+
+        assertNull(blockChain.findBlockByHash("123abc38214fh"));
+    }
+
+    @Test
+    void testFindBlockOnEmptyChain() throws EmptyBlockChainException {
+        assertNull(blockChain.findBlockByHash("123abc38214fh"));
+    }
+
 }

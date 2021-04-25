@@ -23,6 +23,16 @@ public class BlockChain {
         return null;
     }
 
+    public Block addBlock(String data) throws EmptyBlockChainException {
+        if(this.blockChain.size() == 0){
+            Block b = new Block(data, getLastBlock().getHash());
+            b.mineBlock();
+            this.blockChain.add(b);
+            return b;
+        }
+        return null;
+    }
+
     public Block getGenesisBlock() throws EmptyBlockChainException {
         if(blockChain.size() == 0) throw new EmptyBlockChainException();
         return this.blockChain.get(0);
@@ -46,6 +56,11 @@ public class BlockChain {
                 return false;
         }
         return true;
+    }
+
+    public Block findBlockByHash(String hash){
+        return blockChain.stream().filter(block -> block.getHash().equals(hash))
+                .findFirst().orElse(null);
     }
 
 }
