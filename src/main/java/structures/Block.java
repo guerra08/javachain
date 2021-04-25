@@ -54,8 +54,12 @@ public class Block {
     }
 
     public void mineBlock(){
-        int strength = Integer.parseInt(new ResourceLoader().loadBlockChainProperty("nonce.strength"));
-        String targetSubstr = new String(new char[strength]).replace('\0','7');
+        ResourceLoader loader = new ResourceLoader();
+
+        int strength = Integer.parseInt(loader.loadBlockChainProperty("nonce.strength"));
+        char character = loader.loadBlockChainProperty("nonce.target.character").charAt(0);
+
+        String targetSubstr = new String(new char[strength]).replace('\0',character);
 
         while(!this.hash.substring(0, strength).equals(targetSubstr)){
             this.nonce++;
