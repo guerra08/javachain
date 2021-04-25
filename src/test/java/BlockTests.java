@@ -30,4 +30,19 @@ public class BlockTests {
         assertFalse(block.checkHashAgainstBlockHash(wrongHash));
     }
 
+    @Test
+    void testMinedBlock(){
+        Block block = new Block("Sneaky peaky", null);
+        block.mineBlock();
+
+        assertTrue(block.wasBlockMined());
+    }
+
+    @Test
+    void testUnminedBlock(){
+        Block block = new Block("Sneaky peaky", null);
+
+        assertFalse(block.wasBlockMined());
+    }
+
 }

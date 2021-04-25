@@ -67,4 +67,15 @@ public class Block {
         }
     }
 
+    public boolean wasBlockMined(){
+        ResourceLoader loader = new ResourceLoader();
+
+        int strength = Integer.parseInt(loader.loadBlockChainProperty("nonce.strength"));
+        char character = loader.loadBlockChainProperty("nonce.target.character").charAt(0);
+
+        String targetSubstr = new String(new char[strength]).replace('\0',character);
+
+        return this.hash.substring(0, strength).equals(targetSubstr);
+    }
+
 }

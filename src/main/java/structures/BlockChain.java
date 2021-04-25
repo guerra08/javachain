@@ -1,6 +1,7 @@
 package structures;
 
 import exceptions.EmptyBlockChainException;
+import exceptions.UnminedBlockException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +34,15 @@ public class BlockChain {
         return null;
     }
 
+    public Block addBlock(Block b) throws UnminedBlockException, EmptyBlockChainException {
+        if(!b.wasBlockMined()) throw new UnminedBlockException();
+        if(this.blockChain.size() == 0 || this.getLastBlock().checkHashAgainstBlockHash(b.getPreviousHash())){
+            blockChain.add(b);
+            return b;
+        }
+        return null;
+    }
+
     public Block getGenesisBlock() throws EmptyBlockChainException {
         if(blockChain.size() == 0) throw new EmptyBlockChainException();
         return this.blockChain.get(0);
@@ -53,6 +63,8 @@ public class BlockChain {
             if(!previousBlock.getHash().equals(currentBlock.getPreviousHash()))
                 return false;
             if(currentBlock.getTimestamp() < previousBlock.getTimestamp())
+                return false;
+            if(!currentBlock.wasBlockMined())
                 return false;
         }
         return true;

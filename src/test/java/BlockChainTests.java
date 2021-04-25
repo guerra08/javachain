@@ -1,4 +1,5 @@
 import exceptions.EmptyBlockChainException;
+import exceptions.UnminedBlockException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import structures.Block;
@@ -63,6 +64,21 @@ public class BlockChainTests {
     @Test
     void testFindBlockOnEmptyChain() throws EmptyBlockChainException {
         assertNull(blockChain.findBlockByHash("123abc38214fh"));
+    }
+
+    @Test
+    void testAddMinedBlockObject() throws EmptyBlockChainException, UnminedBlockException {
+        Block b = new Block("Some data here", null);
+        b.mineBlock();
+
+        assertNotNull(blockChain.addBlock(b));
+    }
+
+    @Test
+    void testAddUnminedBlockObject() throws EmptyBlockChainException, UnminedBlockException {
+        Block b = new Block("Some data here", null);
+
+        assertThrows(UnminedBlockException.class, () -> blockChain.addBlock(b));
     }
 
 }
