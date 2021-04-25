@@ -7,7 +7,6 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.time.Instant;
-import java.util.Properties;
 
 @Getter
 @Setter
@@ -16,8 +15,8 @@ public class Block {
     private String hash;
     private String previousHash;
     private String blockData;
-    private Long timestamp;
-    private Integer nonce;
+    private long timestamp;
+    private int nonce;
 
     public Block(String data, String prevHash){
         this.blockData = data;
@@ -25,16 +24,14 @@ public class Block {
         this.timestamp = Instant.now().toEpochMilli();
         this.nonce = 0;
         this.hash = calculateSHA256Hash();
-
-        this.mineBlock();
     }
 
     public String calculateSHA256Hash(){
-        String blockRepresentation = hash +
+        String blockRepresentation =
                 previousHash +
                 blockData +
-                timestamp.toString() +
-                nonce.toString();
+                timestamp +
+                nonce;
         try{
             final MessageDigest digest = MessageDigest.getInstance("SHA3-256");
             final byte[] bytes = digest.digest(
@@ -52,7 +49,7 @@ public class Block {
 
     public boolean checkHashAgainstBlockHash(String hash){
         if(this.hash == null) return false;
-        return hash.equals(this.hash);
+        return this.hash.equals(hash);
     }
 
     public void mineBlock(){

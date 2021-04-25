@@ -7,12 +7,13 @@ public class BlockTests {
 
     @Test
     public void testFirstBlockCreation(){
-        assertDoesNotThrow(() -> new Block("Sample data", null));
+        assertDoesNotThrow(() -> (new Block("Sample data", null))).mineBlock();
     }
 
     @Test
     void testValidBlockHashCheck(){
         Block block = new Block("This is just a drill", null);
+        block.mineBlock();
 
         String blockHash = block.getHash();
 
@@ -22,6 +23,7 @@ public class BlockTests {
     @Test
     void testInvalidBlockHashCheck(){
         Block block = new Block("Sneaky peaky", null);
+        block.mineBlock();
 
         String wrongHash = block.getHash() + "123abc43124";
 

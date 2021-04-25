@@ -11,7 +11,7 @@ public class Application {
             blockChain.addBlock("This is the genesis block.", null);
             blockChain.addBlock("This is the second block", blockChain.getLastBlock().getHash());
 
-            System.out.println(blockChain.getLastBlock());
+            System.out.println(blockChain.isBlockChainValid());
         }catch (EmptyBlockChainException e){
             System.err.println("BlockChain cannot be empty");
         }
