@@ -7,6 +7,7 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.time.Instant;
+import java.util.concurrent.ThreadLocalRandom;
 
 @Getter
 @Setter
@@ -22,7 +23,7 @@ public class Block {
         this.blockData = data;
         this.previousHash = prevHash;
         this.timestamp = Instant.now().toEpochMilli();
-        this.nonce = 0;
+        this.nonce = ThreadLocalRandom.current().nextInt(0, 99);
         this.hash = calculateSHA256Hash();
     }
 
@@ -54,7 +55,7 @@ public class Block {
 
     public void mineBlock(){
         int strength = Integer.parseInt(new ResourceLoader().loadBlockChainProperty("nonce.strength"));
-        String targetSubstr = new String(new char[strength]).replace('\0','0');
+        String targetSubstr = new String(new char[strength]).replace('\0','7');
 
         while(!this.hash.substring(0, strength).equals(targetSubstr)){
             this.nonce++;
