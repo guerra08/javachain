@@ -1,5 +1,6 @@
 package structures;
 
+import exceptions.InvalidResourcePropertyException;
 import lombok.*;
 import utils.ResourceLoader;
 
@@ -54,28 +55,29 @@ public class Block {
     }
 
     public void mineBlock(){
-        ResourceLoader loader = new ResourceLoader();
-
-        int strength = Integer.parseInt(loader.loadBlockChainProperty("nonce.strength"));
-        char character = loader.loadBlockChainProperty("nonce.target.character").charAt(0);
-
-        String targetSubstr = new String(new char[strength]).replace('\0',character);
-
-        while(!this.hash.substring(0, strength).equals(targetSubstr)){
-            this.nonce++;
-            this.hash = calculateSHA256Hash();
+        try{
+            int nonceStrength = ResourceLoader.getNonceStrength();
+            char nonceChar = ResourceLoader.getNonceCharacter();
+            String targetSubstr = new String(new char[nonceStrength]).replace('\0', nonceChar);
+            while(!this.hash.substring(0, nonceStrength).equals(targetSubstr)){
+                this.nonce++;
+                this.hash = calculateSHA256Hash();
+            }
+        } catch (InvalidResourcePropertyException e) {
+            e.printStackTrace();
         }
     }
 
     public boolean wasBlockMined(){
-        ResourceLoader loader = new ResourceLoader();
-
-        int strength = Integer.parseInt(loader.loadBlockChainProperty("nonce.strength"));
-        char character = loader.loadBlockChainProperty("nonce.target.character").charAt(0);
-
-        String targetSubstr = new String(new char[strength]).replace('\0',character);
-
-        return this.hash.substring(0, strength).equals(targetSubstr);
+        try{
+            int nonceStrength = ResourceLoader.getNonceStrength();
+            char nonceChar = ResourceLoader.getNonceCharacter();
+            String targetSubstr = new String(new char[nonceStrength]).replace('\0', nonceChar);
+            return this.hash.substring(0, nonceStrength).equals(targetSubstr);
+        } catch (InvalidResourcePropertyException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
 }
